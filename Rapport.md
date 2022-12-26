@@ -13,21 +13,21 @@ Après des journées de recherche de sujets un peu partout sur le web, notre att
 Ce dataset est disponible ici : https://www.kaggle.com/datasets/rishitjavia/netflix-movie-rating-dataset?select=Netflix_Dataset_Movie.csv 
 
 
-Pistes 
+## Pistes 
 
-## Enrichissement du dataset 
+### Enrichissement du dataset 
 
-Générer des noms/prénoms pour les utilisateurs
-Trouver les genres des différents films pour pouvoir les inclure dans notre analyse 
+- [] Générer des noms/prénoms pour les utilisateurs
+- [] Trouver les genres, acteurs, producteurs, des différents films pour pouvoir les inclure dans notre analyse 
 
 
-# Machine Learning 
+### Machine Learning 
 
-## Apprentissage non-supervisé
+#### Apprentissage non-supervisé
 
-Essayer de grouper les utilisateurs en fonctions de leurs "goûts". (k-means, etc)
-Trouver les films qu'un utilisateur est susceptible d'aimer
+- [] Essayer de grouper les utilisateurs en fonctions de leurs "goûts". (k-means, etc)
+- [] Trouver les films qu'un utilisateur est susceptible d'aimer
 
-## Apprentissage supervisé
+#### Apprentissage supervisé
 
-Essayer de prédire la note donnée par un utilisateur à un certain film (découpage préalable du dataset) (k-nn, etc)
+- [] Essayer de prédire la note donnée par un utilisateur à un certain film (découpage préalable du dataset) (k-nn, etc)
