@@ -17,17 +17,17 @@ Ce dataset est disponible ici : https://www.kaggle.com/datasets/rishitjavia/netf
 
 ### Enrichissement du dataset 
 
-- [] Générer des noms/prénoms pour les utilisateurs
-- [] Trouver les genres, acteurs, producteurs, des différents films pour pouvoir les inclure dans notre analyse 
+- [ ] Générer des noms/prénoms pour les utilisateurs
+- [ ] Trouver les genres, acteurs, producteurs, des différents films pour pouvoir les inclure dans notre analyse 
 
 
 ### Machine Learning 
 
 #### Apprentissage non-supervisé
 
-- [] Essayer de grouper les utilisateurs en fonctions de leurs "goûts". (k-means, etc)
-- [] Trouver les films qu'un utilisateur est susceptible d'aimer
+- [ ] Essayer de grouper les utilisateurs en fonctions de leurs "goûts". (k-means, etc)
+- [ ] Trouver les films qu'un utilisateur est susceptible d'aimer
 
 #### Apprentissage supervisé
 
-- [] Essayer de prédire la note donnée par un utilisateur à un certain film (découpage préalable du dataset) (k-nn, etc)
+- [ ] Essayer de prédire la note donnée par un utilisateur à un certain film (découpage préalable du dataset) (k-nn, etc)
