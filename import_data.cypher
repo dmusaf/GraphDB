@@ -55,9 +55,11 @@ CALL{
     CREATE (trip:Trip{
                 trip_id:toInteger(l.tripID), 
                 trip_distance:l.trip_distance,
-                vendor_id:l.VendorID, // 1= Creative Mobile Technologies, LLC; 2= VeriFone Inc. (TPEP provider)
-                tpep_pickup_datetime:l.tpep_pickup_datetime,
-                tpep_dropoff_datetime:l.tpep_dropoff_datetime,
+                vendor_id:toInteger(l.VendorID), // 1= Creative Mobile Technologies, LLC; 2= VeriFone Inc. (TPEP provider)
+                tpep_pickup_date:split(l.tpep_pickup_datetime, " ")[0],
+                tpep_pickup_time:split(l.tpep_pickup_datetime, " ")[1],
+                tpep_dropoff_date:split(l.tpep_dropoff_datetime, " ")[0],
+                tpep_dropoff_time:split(l.tpep_dropoff_datetime, " ")[1],
                 passenger_count:l.passenger_count,
                 ratecode_id:toInteger(l.RatecodeID), // 1=Standard rate, 2=JFK, 3=Newark, 4=Nassau or Westchester, 5=Negotiated fare, 6=Group ride
                 store_and_fwd_flag:l.store_and_fwd_flag, // Y=store and forward trip, N=not a store and forward trip => not very intersting for us
