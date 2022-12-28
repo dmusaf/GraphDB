@@ -1,3 +1,41 @@
+// Nodes
+// (:Location)
+// (:Trip)
+// (:Driver)
+
+// Columns in rides.csv :
+//
+// ====================================================================================
+// ||  VendorID  || tpep_pickup_datetime || tpep_dropoff_datetime || passenger_count ||
+// ====================================================================================
+//
+// =======================================================================================
+// || trip_distance || RatecodeID || store_and_fwd_flag || PULocationID || DOLocationID || 
+// =======================================================================================
+//
+// =============================================================================================
+// || payment_type || extra || mta_tax || tip_amount || tolls_amount || improvement_surcharge ||
+// ============================================================================================= 
+//
+// ===============================================================================
+// || total_amount || congestion_surcharge || airport_fee || tripID || driverID ||
+// ===============================================================================
+
+
+
+// Columns in drivers.csv
+// ==========================================================
+// || driver_id || last_name ||	first_name || plate_number ||
+// ==========================================================
+
+
+
+// Columns in taxi_location_lookup.csv
+// ===================================================
+// || LocationID || Borough || Zone || service_zone ||
+// ===================================================
+
+
 CREATE CONSTRAINT ON (loc:Location) ASSERT loc.loc_id IS UNIQUE;
 CREATE CONSTRAINT ON (trip:Trip) ASSERT trip.trip_id IS UNIQUE;
 CREATE CONSTRAINT ON (driver:Driver) ASSERT driver.driver_id IS UNIQUE;
