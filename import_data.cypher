@@ -40,6 +40,8 @@ CREATE CONSTRAINT ON (loc:Location) ASSERT loc.loc_id IS UNIQUE;
 CREATE CONSTRAINT ON (trip:Trip) ASSERT trip.trip_id IS UNIQUE;
 CREATE CONSTRAINT ON (driver:Driver) ASSERT driver.driver_id IS UNIQUE;
 
+CREATE INDEX location_borough for (loc:Location) on (loc.borough);
+
 LOAD CSV WITH HEADERS FROM "file:/taxi_location_lookup.csv" as l
 CREATE (loc:Location{loc_id:toInteger(l.LocationID), borough:l.Borough, zone:l.Zone, service_zone:l.service_zone});
 
@@ -60,7 +62,7 @@ CALL{
                 tpep_pickup_time:split(l.tpep_pickup_datetime, " ")[1],
                 tpep_dropoff_date:split(l.tpep_dropoff_datetime, " ")[0],
                 tpep_dropoff_time:split(l.tpep_dropoff_datetime, " ")[1],
-                passenger_count:l.passenger_count,
+                passenger_count:toInteger(l.passenger_count),
                 ratecode_id:toInteger(l.RatecodeID), // 1=Standard rate, 2=JFK, 3=Newark, 4=Nassau or Westchester, 5=Negotiated fare, 6=Group ride
                 store_and_fwd_flag:l.store_and_fwd_flag, // Y=store and forward trip, N=not a store and forward trip => not very intersting for us
                 payment_type:l.payment_type, // 1=credit card, 2=cash, 0,3,4,5=other
@@ -70,4 +72,4 @@ CALL{
     CREATE (trip) -[:from]-> (source)
     CREATE (trip) -[:to]-> (dest)
     CREATE (driver) -[:drives]-> (trip)
-} IN TRANSACTIONS
+} IN TRANSACTIONS;
