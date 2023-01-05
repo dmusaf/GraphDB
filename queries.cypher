@@ -1,22 +1,24 @@
-// 1. Find the locations that are never the pickup location of a trip
-MATCH (l1:Location) WHERE NOT EXISTS((l1)--(:Trip)--(:Location)) 
-return l1;
-
-// 2. Get the number of distinct dropoff_locations for each pickup location
-MATCH (l1:Location) OPTIONAL MATCH (l1)<-[:from]-(t:Trip)-[:to]->(l2:Location) 
-return l1, count(DISTINCT l2) as nb_dp_locations 
-order by nb_dp_locations desc
-
-// 3. Show the locations in Manhattan that were part of at least 100 trips.
-match (pickup:Location{borough:"Manhattan"})--(:Trip)
-with pickup, count(*) as nb_trips
-where nb_trips > 100
-return pickup, nb_trips
-
-// 4. For each location, calculate the number of time that location was the pickup location and the number of time that location was the dropoff location.
-match (l:Location)<-[r]-(:Trip)
-with *, type(r) as type
-return l, type, count(*) as nb
-order by l.loc_id
+// 1. Find the movies that don't have any actor
+MATCH (m:Movie) WHERE NOT EXISTS((m)--(:RATED)--(:User)) 
+RETURN m;
 
 
+// 2. Get the number of movie that Jim Carrey played in
+MATCH (:Actor{name:"Tom Hanks"})-[:ACTED_IN]->(m:Movie)
+WITH COUNT(DISTINCT m) AS jim_carrey_movies
+RETURN jim_carrey_movies;
+
+
+// 3. Get the number of movies by genre that Jim Carrey played in
+MATCH (g:Genre) OPTIONAL MATCH (g)<-[:genre]-(m:Movie)-[:ACTED_IN]->(:Actor{name:"Jim Carrey"}) 
+RETURN g, COUNT(DISTINCT m) AS nb_films 
+ORDER BY nb_films DESC
+
+// 4. Show the actors that played in at least 50 movies
+MATCH (a:Actor)-[:ACTED_IN]->(m:Movie)
+WITH a, COUNT(*) AS nb_movies
+WHERE nb_movies > 50
+RETURN a.name
+
+// Trouver l'écart maximal entre deux acteurs. deux personnes.
+ 
