@@ -1,10 +1,10 @@
-CREATE CONSTRAINT ON (m:Movie) ASSERT m.id IS UNIQUE;
-CREATE CONSTRAINT ON (m:Movie) ASSERT m.tmdbId IS UNIQUE;
-CREATE CONSTRAINT ON (a:Actor) ASSERT a.id IS UNIQUE;
-CREATE CONSTRAINT ON (u:User) ASSERT u.id IS UNIQUE;
+CREATE CONSTRAINT FOR (m:Movie) REQUIRE m.id IS UNIQUE;
+CREATE CONSTRAINT FOR (m:Movie) REQUIRE m.tmdbId IS UNIQUE;
+CREATE CONSTRAINT FOR (a:Actor) REQUIRE a.id IS UNIQUE;
+CREATE CONSTRAINT FOR (u:User) REQUIRE u.id IS UNIQUE;
+CREATE CONSTRAINT FOR (d:Director) REQUIRE d.id IS UNIQUE;
 
-CREATE INDEX movie_id for (m:Movie) on (m.id)
-CREATE INDEX rating_movie for (r:Rating) on (r.movieId)
+CREATE INDEX rating_movie for (r:Rating) on (r.movieId);
 
 LOAD CSV WITH HEADERS FROM "file:/movies.csv" AS row 
 CREATE (movie:Movie{
@@ -36,13 +36,32 @@ CALL {
         popularity:toFloat(row.popularity)})
 } IN TRANSACTIONS OF 1000 ROWS
 
+:auto LOAD CSV WITH HEADERS FROM "file:/directors.csv" AS row   
+CALL {
+    WITH row
+    CREATE (d:Director{
+        id:toInteger(row.director_id),
+        name:row.name,
+        originalName:row.original_name,
+        gender:toInteger(row.gender),
+        popularity:toFloat(row.popularity)})
+} IN TRANSACTIONS OF 1000 ROWS
 
-:auto LOAD CSV WITH HEADERS FROM "file:/cast.csv" AS row
+
+:auto LOAD CSV WITH HEADERS FROM "file:/links_cast.csv" AS row
 CALL {
     WITH row
     MERGE (m:Movie{tmdbId:toInteger(row.tmdb_movie_id)})
     MERGE (a:Actor{id:toInteger(row.actor_id)})
     CREATE (a)-[:ACTED_IN]->(m)
+} IN TRANSACTIONS OF 1000 ROWS
+
+:auto LOAD CSV WITH HEADERS FROM "file:/links_crew.csv" AS row
+CALL {
+    WITH row
+    MERGE (m:Movie{tmdbId:toInteger(row.tmdb_movie_id)})
+    MERGE (d:Director{id:toInteger(row.director_id)})
+    CREATE (d)-[:DIRECTED]->(m)
 } IN TRANSACTIONS OF 1000 ROWS
 
 :auto LOAD CSV WITH HEADERS FROM "file:/ratings.csv" AS row
