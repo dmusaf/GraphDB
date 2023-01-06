@@ -12,18 +12,28 @@ CALL gds.graph.project(
         }
     })
 YIELD
-    graphName, nodeCount, relationshipCount
+    graphName, nodeCount, relationshipCount;
 
 
 CALL gds.beta.collapsePath.mutate("moviesAndActors",{
     pathTemplates:[["ACTED_IN", "HAS_ACTOR"]],
     allowSelfLoops:false,
     mutateRelationshipType:'KNOWS'
-}) YIELD relationshipsWritten
+}) YIELD relationshipsWritten;
 
 // Finding the 10 most "popular" actor (i.e the one who knows the most people) (PAGERANK)
 
 CALL gds.pageRank.stream('moviesAndActors',{
+    nodeLabels:["Actor"],
+    relationshipTypes:['KNOWS']
+})
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS name, score
+ORDER BY score DESC
+LIMIT 10;
+
+// Comparing the results with ArticleRank
+CALL gds.articleRank.stream('moviesAndActors',{
     nodeLabels:["Actor"],
     relationshipTypes:['KNOWS']
 })
