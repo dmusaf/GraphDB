@@ -20,3 +20,14 @@ CALL gds.beta.collapsePath.mutate("moviesAndActors",{
     allowSelfLoops:false,
     mutateRelationshipType:'KNOWS'
 }) YIELD relationshipsWritten
+
+// Finding the 10 most "popular" actor (i.e the one who knows the most people) (PAGERANK)
+
+CALL gds.pageRank.stream('moviesAndActors',{
+    nodeLabels:["Actor"],
+    relationshipTypes:['KNOWS']
+})
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS name, score
+ORDER BY score DESC
+LIMIT 10;
