@@ -26,5 +26,37 @@ ORDER BY nb_movies DESC
 MATCH (:Actor{name:"Denzel Washington"})-[path*2]-(d:Director)
 return count(distinct d) as nb_directors
 
+
+
 // Trouver l'écart maximal entre deux acteurs. deux personnes.
- 
+
+
+// 7. Find the total duration for actors
+MATCH (movie:Movie)<-[:ACTED_IN]-(actor:Actor)
+WITH actor, COLLECT(movie) AS movies
+RETURN actor.name, REDUCE(total_duration = 0, movie IN movies | total_duration + movie.duration) AS total_duration
+
+// 8. Trouver le nombre de films
+MATCH (movie:Movie)<-[:ACTED_IN]-(actor:Actor)
+WHERE actor.name IN ['Tom Hanks', 'Julia Roberts']
+RETURN actor.name, movie.title, movie.year
+UNION
+MATCH (movie:Movie)<-[:DIRECTED]-(director:Director)
+WHERE director.name IN ['Steven Spielberg', 'Ron Howard']
+RETURN director.name, movie.title, movie.year
+CALL {
+  MATCH (actor:Actor)
+  RETURN actor.name, count(*) AS movie_count
+}
+FILTER movie_count > 2
+RETURN name, movie_count
+
+// 9. 
+MATCH (movie:Movie)<-[:ACTED_IN]-(actor:Actor)
+WHERE actor.name IN ['Tom Hanks', 'Julia Roberts']
+RETURN actor.name,
+       ALL(x IN movies WHERE x.rating > 7) AS all_high_rated,
+       ANY(x IN movies WHERE x.rating > 7) AS any_high_rated,
+       EXISTS(x IN movies WHERE x.rating > 7) AS exists_high_rated,
+       NONE(x IN movies WHERE x.rating > 7) AS none_high_rated,
+       SINGLE(x IN movies WHERE x.rating > 7) AS single_high_rated
