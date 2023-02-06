@@ -1,12 +1,12 @@
 // 1. (Negative filter) Find the movies that don't have any actor
 MATCH (m:Movie) 
-WHERE NOT EXISTS((m)--(:RATED)--(:User)) 
+WHERE NOT EXISTS((m)-[:RATED]-(:User)) 
 RETURN m;
 
 
-// 2. (With agrégation) Get the number of movie that Jim Carrey played in
+// 2. (With agrégation) Get the number of movie that Tom Hanks played in
 MATCH (:Actor{name:"Tom Hanks"})-[:ACTED_IN]->(m:Movie)
-WITH COUNT(DISTINCT m) AS jim_carrey_movies
+WITH COUNT(DISTINCT m) AS tom_hanks_movies
 RETURN jim_carrey_movies;
 
 
