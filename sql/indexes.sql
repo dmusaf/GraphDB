@@ -1,0 +1,9 @@
+CREATE INDEX movie_tmdb_id ON Movies(tmdb_id);
+CREATE INDEX actor_name ON Actors(name);
+CREATE INDEX casting_actor ON Casting(actorId);
+CREATE INDEX casting_movie ON Casting(movie_tmdb_id);
+CREATE INDEX directed_director ON Directed(director_id);
+CREATE INDEX directed_director ON Directed(movie_tmdb_id);
+CREATE INDEX ratings_movie ON Ratings(movie_id);
+CREATE INDEX ratings_grade ON Ratings(grade);
+CREATE INDEX ratings_user ON Ratings(user_id);
