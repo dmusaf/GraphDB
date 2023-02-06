@@ -15,7 +15,8 @@ CREATE (movie:Movie{
             tmdbId:toInteger(row.tmdb_id),
             release_date:date(row.release_date),
             duration:toInteger(row.duration),
-            principal_genre:split(row.genres, ':')
+            genres:split(row.genres, ':'),
+            studios:split(row.studios, ':')
         });
 
 
