@@ -6,7 +6,7 @@ CREATE CONSTRAINT FOR (d:Director) REQUIRE d.id IS UNIQUE;
 CREATE CONSTRAINT FOR (c:Country) REQUIRE c.id IS UNIQUE;
 
 CREATE INDEX rating_movie for (r:Rating) on (r.movieId);
-CREATE INDEX movie_title for (m:Movie) on (r.title);
+CREATE INDEX movie_title for (m:Movie) on (m.title);
 
 LOAD CSV WITH HEADERS FROM "file:/movies.csv" AS row 
 CREATE (movie:Movie{
