@@ -94,6 +94,6 @@ CALL {
     WITH row
     MERGE (u:User{id:toInteger(row.user_id)})
     MERGE (m:Movie{id:toInteger(row.movie_id)})
-    CREATE (u)-[:RATED]->(r:Rating{score:toFloat(row.rating)})-[:FOR]->(m)
+    CREATE (u)-[:RATED{grade:toFloat(row.rating)}]->(m)
 } IN TRANSACTIONS OF 1000 ROWS
 
