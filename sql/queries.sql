@@ -4,7 +4,7 @@ SELECT COUNT(*) as nb_movies from Movies m
 JOIN casting c ON m.tmdb_id = c.movie_tmdb_id
 WHERE c.actorid in 
 (SELECT id FROM Actors 
-WHERE name = 'Jim Carrey' );
+WHERE name = 'Tom Hanks' );
 
 /* Find how many directors directed Denzel Washington */
 
