@@ -1,0 +1,87 @@
+---
+title: "Rapport  BDS"
+author: "David Musafiri and Lucas Ketels"
+date: "2023-02-05"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Introduction 
+
+# Collecting the data
+
+# Importing the data
+
+# Querying the data 
+
+# Graph Data Science
+
+## Node similarity
+
+### Motivations
+
+As mentioned previously, the whole aim of our project was to build a movie recommendation model. So that's what we tried to do. In more detail, we wanted to be able to give a set of movies that are the most "similar" to a certain movie. More precisely, given a certain movie $m_1$, we wanted to give movies $(m)_i$ so that a user that liked $m_1$ would like the movies $(m)_i$.
+
+In order to do that, we needed to mathematically formalize the notion of similarity between movies with respect to the rantings given by the users. 
+
+### Similarity
+
+Let $(m_i)_{i \in I}$ be the movies and for each movie $m_i$, let $U_i$ be the set of users that liked (gave a good rating to) the movie $m_i$. Let $m_i$ and $m_j$ be two movies and $U_i$ and $U_j$ their respective "User subsets". What we want to do is build a notion of similarity such that the bigger $\dfrac{\lvert U_i \cap U_j\rvert}{\lvert U_i \cup U_j\rvert}$ is than the more similar $m_i$ and $m_j$ are. This coefficient corresponds to the Jaccard Similarity.
+
+### Keeping the good grades
+
+The Node Similarity algorithm calculates the similarity defined above for each pair of vectors. However, we have to do some work on our data before applying the algorithm. The Node Similarity doesn't look at the properties of the relationships. 
+
+In fact, "the Node Similarity algorithm compares a set of nodes based on the nodes they are connected to". In on our case it is extremely important. A user that gave a 1/5 rating to a movie should not be considered the same as another user that gave a 5/5 rating to the same movie. 
+
+We needed to create a new relationship called LIKES defined as follows $$u_i \ LIKES \ m_i \iff (u_i \ RATED\{rating:r\}\ m_i) \land (r \ge s) $$ with $s \in [1,5]$ our threshold.
+
+We didn't find a convenient way to build such a relationship directly in the projection. So we did it, on the graph with the following code :
+
+```{cypher}
+CALL apoc.periodic.iterate(
+  "MATCH (u:User)-[r:RATED]->(m:Movie) WHERE r.grade >= 3 RETURN u, m",
+  "MERGE (u)-[:LIKES]->(m)",
+  {batchSize:1000, parallel:false}
+)
+```
+
+You understand that the threshold we chose was $s=3$.
+
+### Applying the algorithm
+
+Now that we have a relationship that says that a user liked a movie, we can now process to the algorithm. First, we need to create a projection of the graph i.e build a smaller graph with only relevant data for the algorithm, in our case, for the nodes, we only keep the Movie and User nodes. As for the relationships, we only need the relationship that we just created : LIKES.
+
+```{cypher}
+CALL gds.graph.project(
+  'usersLikes',
+  ['Movie', 'User'],
+  ['LIKES']
+)
+```
+
+Now that we have our projection, we need to choose the parameters that we will run our algorithm with.
+
+### Discussing the results
+
+## Using the Python Driver - Node embedding
+
+In that part we tried to use another method used in Machine Learning, the Node Embedding. Basically, we want to represent our movies as vectors so we can compare them easily by using the cos-similarity function for example. 
+
+
+### FastRP 
+
+In order, to do so we have many choices of algorithms in the Graph Data Science library (Graph2SAGE, Node2Vec, ...) but the FastRP seemed to be the most appropriate algorithm for our problem, for our data. The FastRP algorithm also gives us a notion of proximity given by the neighborhood of nodes. Plus, it has an option to take consideration of the weights of our relationships.
+
+### Python
+
+We did all of the process in Python via the `graphdatascience` driver in order to do some further processing outside of Neo4J with the calculated vectors, like computing the cos-similarity.
+
+You can find more information in the NodeEmbedding notebook.
+
+
+
