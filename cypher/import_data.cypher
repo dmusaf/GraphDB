@@ -18,6 +18,14 @@ CREATE (movie:Movie{
             genres:split(row.genres, ':'),
             studios:split(row.studios, ':')
         });
+        
+:auto LOAD CSV WITH HEADERS FROM "file:/genres.csv" AS row 
+CALL {
+    WITH row
+    MERGE (m:Movie{id:toInteger(row.movie_id)})
+    MERGE (g:Genre{name:row.genre})
+    CREATE (m)-[:GENRE]->(g)
+} IN TRANSACTIONS
 
 
 :auto LOAD CSV WITH HEADERS FROM "file:/actors.csv" AS row   
