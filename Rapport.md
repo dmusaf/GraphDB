@@ -13,7 +13,18 @@ Après des journées de recherche de sujets un peu partout sur le web, notre att
 Ce dataset est disponible ici : https://www.kaggle.com/datasets/rishitjavia/netflix-movie-rating-dataset?select=Netflix_Dataset_Movie.csv 
 
 
-## Pistes 
+## Analytique de graphe
+    
+### Analyse d'importances de noeuds
+
+Dans cette partie, nous avons premièrement décidé de nous intéresser à la popularité des acteurs. Nous avons commencé par créer une relation artificielle KNOWS qui lie deux acteurs qui ont joué sur le même film. Puis nous avons utilisé les algos PageRank et Article Rank pour trouver les acteurs les plus "populaires".
+
+#### Pagerank
+
+
+
+### Node embedding
+
 
 ### Enrichissement du dataset 
 
